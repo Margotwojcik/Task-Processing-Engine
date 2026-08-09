@@ -99,3 +99,31 @@ TEST(ThreadPoolTest, HandlesDifferentReturnTypes)
     EXPECT_EQ(intResult.get(), 123);
     EXPECT_EQ(stringResult.get(), "ThreadPool");
 }
+
+
+
+TEST(ThreadPoolTest, HandlesTaskExceptions)
+{
+    ThreadPool pool(2);
+
+    auto result = pool.enqueue([]() -> int {
+        throw std::runtime_error("Task failed");
+    });
+
+    EXPECT_THROW(result.get(), std::runtime_error);
+}
+
+
+TEST(ThreadPoolTest, RejectsTasksAfterShutdown)
+{
+    ThreadPool pool(2);
+
+    pool.shutdown();
+
+    EXPECT_THROW(
+        pool.enqueue([] {
+            return 42;
+        }),
+        std::runtime_error
+    );
+}
