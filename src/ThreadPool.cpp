@@ -26,14 +26,30 @@ ThreadPool::ThreadPool(size_t threads) : stop(false) {
     }
 }
 
-ThreadPool::~ThreadPool() {
+
+
+ThreadPool::~ThreadPool()
+{
+    shutdown();
+}
+
+
+void ThreadPool::shutdown()
+{
     {
         std::unique_lock<std::mutex> lock(queueMutex);
+
+        if (stop)
+            return;
+
         stop = true;
     }
 
     condition.notify_all();
 
-    for (std::thread &worker : workers)
-        worker.join();
+    for (std::thread& worker : workers)
+    {
+        if (worker.joinable())
+            worker.join();
+    }
 }

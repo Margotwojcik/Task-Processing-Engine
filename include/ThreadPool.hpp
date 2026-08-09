@@ -14,6 +14,8 @@ public:
     explicit ThreadPool(size_t threads);
     ~ThreadPool();
 
+    void shutdown();
+
     template<class F, class... Args>
     auto enqueue(F&& f, Args&&... args)
         -> std::future<typename std::invoke_result<F, Args...>::type>;
