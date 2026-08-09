@@ -1,0 +1,23 @@
+# Build directories
+build/
+
+# Compiled executables
+*.exe
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
